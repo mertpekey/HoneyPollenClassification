@@ -42,24 +42,37 @@ We should definitely use data augmentation. We have just a few samples for most 
 
 
 
+### Folder Structure ###
+
+- model_checkpoints/
+    - will contain model checkpoints
+
+- notebooks/
+    - data_analysis.ipynb - **Dataset Class and analysis of dataset**
+    - training_notebook.ipynb - **Training of models will be tested here**
+
+- src/
+    - model/trainer.py - **Contains trainer class**
+    - model/config.py - **Contains configs (May be separated as model_configs and configs)**
+    - model/model_classes.py - **Will contain all the model classes (May be separated)**
+    - data/get_pollen_family.py - **Get pollen Families given pollen types**
+    - data/make_dataset.py - **Contains codes about dataset class**
+- utils/eval_utils.py - **Utilization functions for model evaluation**
+- utils/eval_utils.py - **All the other functions**
+
+
 
 ### TO-DO ###
 
 - Dataset Class **(Dataset created in a Dataframe with Pollen Type and Family)**
     - Data Analysis **(Plots not fine. Answers grammer should be corrected. Cross validation, Data augmentation and train/val/test split size can be re-checked.)**
 - Model
-    - Folder contains models
+    - Folder contains models **(model/model_classes.py)**
     - Checkpoint folder
-- train.py
-- eval.py
-- predict.py
-- configs.py
-- Utils Folder
     - optimization_funcs.py
     - loss_funcs.py
     - util_functions.py
-        - view_dataloader_imgs
-        - create_dataset - create_dataloader
+        - view_dataloader_imgs **(Done)**
+        - create_dataset - create_dataloader **Done**
         - plot_loss - plot_acc - tensorboard?
 - Argument Parser
-- Pytorch Lightning
