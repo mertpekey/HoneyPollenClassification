@@ -8,7 +8,7 @@ from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
-import get_pollen_family as pf
+import data.get_pollen_family as pf
 
 
 def get_dataset_roots(dir_path):
@@ -88,12 +88,15 @@ class PollenDataset(Dataset):
     def __init__(self, data, transform=None, is_family=False):
         
         self.transform = transform
-        
         self.data = data
         if is_family:
             self.class_names = self.data['family'].unique()
+            self.idx_to_class = {i:j for i, j in enumerate(self.class_names)}
+            self.class_to_idx = {value:key for key,value in self.idx_to_class.items()}
         else:
             self.class_names = self.data['type'].unique()
+            self.idx_to_class = {i:j for i, j in enumerate(self.class_names)}
+            self.class_to_idx = {value:key for key,value in self.idx_to_class.items()}
 
     def __len__(self):
         return len(self.data)
@@ -101,7 +104,8 @@ class PollenDataset(Dataset):
     def __getitem__(self, idx):
         
         img_root = self.data.iloc[idx,0]
-        label = self.data.iloc[idx, 1]
+        label = str(self.data.iloc[idx, 1])
+        label_num = self.class_to_idx[label]
         
         #img = torchvision.io.read_image(img_root)
         img = Image.open(img_root)
@@ -109,7 +113,8 @@ class PollenDataset(Dataset):
         if self.transform:
             img = self.transform(img)
 
-        return img, label
+        return img, label_num
+        
 
 
 def create_dataloader(dataset, batch_size, is_train=False):

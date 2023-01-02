@@ -1,5 +1,8 @@
 import torch
 import torch.nn as nn
+import torchvision
+
+import model.config as config
 
 
 class BaseModel(nn.Module):
@@ -23,3 +26,19 @@ class BaseModel(nn.Module):
         
         x = self.net(x)
         return x
+
+
+def get_model(model_name, class_names, full_train = False, pretrained = False):
+    
+    if model_name == 'resnet50':
+        if pretrained:
+            model = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.DEFAULT).to(config.DEVICE)
+        else:
+            model = torchvision.models.resnet50().to(config.DEVICE)
+        
+        if full_train == False:
+            for parameter in model.parameters():
+                parameter.requires_grad = False
+            
+        model.fc = nn.Linear(in_features=2048, out_features=len(class_names)).to(config.DEVICE)
+        return model

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-import config
+import model.config as config
 import utils.other_utils as other_utils
 
 
@@ -43,9 +43,9 @@ class Trainer():
 
       # Calculating Performance Metrics
       epoch_loss += loss.detach().item() / X.shape[0]
-      #epoch_accuracy += (torch.argmax(torch.softmax(out[:,0,:], dim=1), dim=1) == y).sum() / X.shape[0]
+      epoch_accuracy += (torch.argmax(out, dim=1) == y).sum() / X.shape[0]
 
-    return epoch_loss#, epoch_accuracy
+    return epoch_loss, epoch_accuracy
 
 
   def eval_step(self, val_dataloader):
@@ -68,9 +68,9 @@ class Trainer():
 
         # Calculating Performance Metrics
         epoch_loss += loss.item() / X.shape[0]
-        #epoch_accuracy += (torch.argmax(torch.softmax(out[:,0,:], dim=1), dim=1) == y).sum() / X.shape[0]
+        epoch_accuracy += (torch.argmax(out, dim=1) == y).sum() / X.shape[0]
 
-    return epoch_loss#, epoch_accuracy
+    return epoch_loss, epoch_accuracy
 
   def predict_step(self, val_dataloader):
 

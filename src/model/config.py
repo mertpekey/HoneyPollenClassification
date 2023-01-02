@@ -16,39 +16,14 @@ NUM_WORKERS = 2
 IMG_CHANNELS = 3
 DATA_ROOT = '/Users/mpekey/Desktop/Mert_SabanciUniv/CS518/HoneyPollenClassification/dataset'
 
-DUMMY_TRANSFORM = T.Compose([
-            T.Resize((32,32)),
-            T.Normalize(mean = (0,0,0), std = (1,1,1)),
-            T.ToTensor()
+
+train_transform = T.Compose([
+            T.Resize((224,224)),
+            T.ToTensor(),
+            T.Normalize(mean = (0,0,0), std = (1,1,1))
         ])
-
-def get_data_transform(means, stdevs, is_train = True):
-
-    if is_train:
-        data_transform = T.Compose([
-            T.Resize((32,32)),
-            T.Normalize(mean = means, std = stdevs),
-            T.ToTensor()
+test_transform = T.Compose([
+            T.Resize((224,224)),
+            T.ToTensor(),
+            T.Normalize(mean = (0,0,0), std = (1,1,1))
         ])
-    else:
-        data_transform = T.Compose([
-            T.Resize((32,32)),
-            T.Normalize(mean = means, std = stdevs),
-            T.ToTensor()
-        ])
-    return data_transform
-
-# train_transform = A.Compose(
-#     [
-#         A.Resize(width=LOW_RES, height=LOW_RES, interpolation=Image.BICUBIC),
-#         A.Normalize(mean=[0, 0, 0], std=[1, 1, 1]),
-#         ToTensorV2(),
-#     ]
-# )
-
-# test_transform = A.Compose(
-#     [
-#         A.Normalize(mean=[0, 0, 0], std=[1, 1, 1]),
-#         ToTensorV2(),
-#     ]
-# )
