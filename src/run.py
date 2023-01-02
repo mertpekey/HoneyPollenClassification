@@ -1,13 +1,6 @@
-import os
-import math
-import pandas as pd
-import numpy as np
 import torch
-import torchvision
-from torchvision import transforms
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image
 import torch.nn as nn
+from torch.utils.data import DataLoader
 
 import model.model_classes as models
 import model.trainer as trainer
@@ -38,10 +31,13 @@ if __name__ == '__main__':
     val_dataloader = DataLoader(val_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
     test_dataloader = DataLoader(test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
 
+    model_name = 'resnet50'
+    experiment_name = 'deneme'
+
     # Get Model
-    my_model = models.get_model(model_name='resnet50',
+    my_model = models.get_model(model_name=model_name,
                             class_names=train_dataset.class_names,
-                            full_train=False,
+                            full_train=True,
                             pretrained=False)
     optimizer = torch.optim.Adam(my_model.parameters(), lr=config.LEARNING_RATE)
     criterion = nn.CrossEntropyLoss()
@@ -50,6 +46,8 @@ if __name__ == '__main__':
     model_trainer = trainer.Trainer(model = my_model,
                                     criterion = criterion,
                                     optimizer = optimizer, 
-                                    device = config.DEVICE)
+                                    device = config.DEVICE,
+                                    model_name = model_name,
+                                    experiment_name = experiment_name)
 
     model_trainer.train(train_dataloader, val_dataloader, num_epochs = config.NUM_EPOCHS)
