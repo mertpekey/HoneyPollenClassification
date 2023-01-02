@@ -1,6 +1,5 @@
 dataset/
 .ipynb_checkpoints
+*/.ipynb_checkpoints/*
 .DS_STORE
-src/data/__pycache__
-src/model/__pycache__
-src/utils/__pycache__
+__pycache__/
