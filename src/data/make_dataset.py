@@ -38,7 +38,7 @@ def split_datasets(pollen_df, class_amt_df, label_name = 'type'):
 
         if label_name == 'type':
             if img_amount >= 5:
-                split_ratio = (0.6,0.2,0.2) # May be changed
+                split_ratio = (0.6,0.2,0.2)
             elif img_amount == 4:
                 split_ratio = (0.5,0.25,0.25)
             elif img_amount == 3:
@@ -107,7 +107,6 @@ class PollenDataset(Dataset):
         label = str(self.data.iloc[idx, 1])
         label_num = self.class_to_idx[label]
         
-        #img = torchvision.io.read_image(img_root)
         img = Image.open(img_root)
         
         if self.transform:

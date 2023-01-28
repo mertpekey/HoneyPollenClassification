@@ -1,5 +1,13 @@
 dataset/
+dataset_resized/
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 .DS_STORE
 __pycache__/
+PollenDist20.png
+PollenDistAll.png
+src/data/__pycache__/
+src/model/__pycache__/
+src/utils/__pycache__/
+.ipynb_checkpoints/
+

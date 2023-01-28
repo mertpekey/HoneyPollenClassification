@@ -19,7 +19,10 @@ if __name__ == '__main__':
     type_amt_df = pollen_df['type'].value_counts().reset_index().rename(columns={'index':'type', 'type':'img_num'})
 
     # Split Data
-    train_df, val_df, test_df = data_funcs.split_datasets(pollen_df, family_amt_df, label_name = class_type)
+    if class_type == 'type':
+        train_df, val_df, test_df = data_funcs.split_datasets(pollen_df, type_amt_df, label_name = class_type)
+    elif class_type == 'family':
+        train_df, val_df, test_df = data_funcs.split_datasets(pollen_df, family_amt_df, label_name = class_type)
 
     # Create Datasets
     train_dataset = data_funcs.PollenDataset(data=train_df, transform=config.train_transform, is_family=True if class_type=='family' else False)
@@ -32,7 +35,7 @@ if __name__ == '__main__':
     test_dataloader = DataLoader(test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
 
     model_name = 'resnet50'
-    experiment_name = 'deneme'
+    experiment_name = 'zero_train_transform_8b_64s_1e4lr'
 
     # Get Model
     my_model = models.get_model(model_name=model_name,
@@ -40,14 +43,15 @@ if __name__ == '__main__':
                             full_train=True,
                             pretrained=False)
     optimizer = torch.optim.Adam(my_model.parameters(), lr=config.LEARNING_RATE)
-    criterion = nn.CrossEntropyLoss()
-
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.0)
+    scheduler = None
     # Train
-    model_trainer = trainer.Trainer(model = my_model,
-                                    criterion = criterion,
-                                    optimizer = optimizer, 
-                                    device = config.DEVICE,
-                                    model_name = model_name,
-                                    experiment_name = experiment_name)
+    model_trainer = trainer(model = my_model,
+                                criterion = criterion,
+                                optimizer = optimizer, 
+                                lr_scheduler = scheduler,
+                                device = config.DEVICE,
+                                model_name = model_name,
+                                experiment_name = experiment_name)
 
-    model_trainer.train(train_dataloader, val_dataloader, num_epochs = config.NUM_EPOCHS)
+    model_trainer.train(train_dataloader, val_dataloader, num_epochs = config.NUM_EPOCHS, patience = config.PATIENCE)
